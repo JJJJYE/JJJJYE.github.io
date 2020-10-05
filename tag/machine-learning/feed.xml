@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
+  <link href="https://jjjjye.github.io/tag/machine-learning/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="https://jjjjye.github.io/" rel="alternate" type="text/html" />
+  <updated>2020-10-05T19:23:28+09:00</updated>
+  <id>https://jjjjye.github.io/tag/machine-learning/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">Machine Learning with R | </title>
+  
+
+  
+    <subtitle>머신러닝</subtitle>
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">Model Evaluation</title>
+      <link href="https://jjjjye.github.io/Model-Evaluation" rel="alternate" type="text/html" title="Model Evaluation" />
+      <published>2020-09-15T01:40:00+09:00</published>
+      <updated>2020-09-15T01:40:00+09:00</updated>
+      <id>https://jjjjye.github.io/Model-Evaluation</id>
+      <content type="html" xml:base="https://jjjjye.github.io/Model-Evaluation">&lt;h1 id=&quot;--contents&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt;  &lt;strong&gt;Contents&lt;/strong&gt;&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#p1&quot;&gt;모형을 평가하는 방법&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#p2&quot;&gt;분류성능의 평가&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#p3&quot;&gt;예측성능의 평가&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;p1&quot;&gt;&lt;i class=&quot;fa fa-play&quot;&gt;&lt;/i&gt; 모형을 평가하는 방법&lt;/h2&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;모형을-평가하는-방법-1&quot;&gt;모형을 평가하는 방법 (1)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;span style=&quot;color:red&quot;&gt;예측력&lt;/span&gt; : 주어진 예측변수값에 대하여 Target의 값을 얼마나 잘 예측하는가?&lt;/li&gt;
+  &lt;li&gt;해석력&lt;/li&gt;
+  &lt;li&gt;효율성&lt;/li&gt;
+  &lt;li&gt;안정성&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;모형을-평가하는-방법-2&quot;&gt;모형을 평가하는 방법 (2)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;수치화
+    &lt;ul&gt;
+      &lt;li&gt;Target이 수치형 : MSE, MAPE, RMSE 등&lt;/li&gt;
+      &lt;li&gt;분류 : 분류행렬, 특이도와 민감도, 오분류 비용&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;시각화
+    &lt;ul&gt;
+      &lt;li&gt;ROC 곡선 : 모델의 성능이 얼마나 좋은 지 확인하기 위해 시각적으로 표현한 그래프&lt;/li&gt;
+      &lt;li&gt;Lift Chart : 전체 샘플을 정확하게 분류하기 보다 상위의 새로운 샘플을 정확하게 분류&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;p2&quot;&gt;&lt;i class=&quot;fa fa-play&quot;&gt;&lt;/i&gt; 분류성능의 평가&lt;/h2&gt;
+
+&lt;h3 id=&quot;분류행렬&quot;&gt;분류행렬&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Validation Data에 대한 분류행렬 사용
+    &lt;ul&gt;
+      &lt;li&gt;Training Data에 대한 분류행렬은 과적합 위험성 때문에 새로운 데이터에 대한 정확도가 떨어짐&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;분류행렬을 이용하여 정확도와 오분류율을 계산&lt;/li&gt;
+  &lt;li&gt;특정클래스에 관심이 있다면?
+    &lt;ul&gt;
+      &lt;li&gt;민감도 : 관심 클래스를 정확하게 예측하는 능력&lt;/li&gt;
+      &lt;li&gt;특이도 : 관심 없는 클래스를 정확하게 예측하는 능력&lt;/li&gt;
+      &lt;li&gt;양성 예측도(Positive predictive value) : 관심 예측 클래스 중 실제 관심 클래스의 비&lt;/li&gt;
+      &lt;li&gt;음성 예측도(Negative predictive value) : 관심 없는 예측 클래스 중 실제 관심 없는 클래스의 비&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cutoff-value&quot;&gt;Cutoff Value&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;관심 클래스에 속할 확률과 기준값 (Cutoff Value)
+    &lt;ul&gt;
+      &lt;li&gt;관심 클래스(클래스1)에 속할 확률이 기준값보다 크면 클래스1로 분류&lt;/li&gt;
+      &lt;li&gt;관심 클래스(클래스1)에 속할 확률이 기준값보다 작으면 클래스0으로 분류&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;일반적으로 0.5를 선호
+    &lt;ul&gt;
+      &lt;li&gt;오차가 가장 낮으며, 정확도는 가장 높기 때문&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;p3&quot;&gt;&lt;i class=&quot;fa fa-play&quot;&gt;&lt;/i&gt; 예측성능의 평가&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;MSE&lt;/li&gt;
+  &lt;li&gt;MAPE&lt;/li&gt;
+&lt;/ul&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>YeongEun Jeon</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="machine-learning" />
+      
+
+      
+        <summary type="html">Contents 모형을 평가하는 방법 분류성능의 평가 예측성능의 평가</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Data Partition</title>
+      <link href="https://jjjjye.github.io/Data-Partition" rel="alternate" type="text/html" title="Data Partition" />
+      <published>2020-09-08T01:40:00+09:00</published>
+      <updated>2020-09-08T01:40:00+09:00</updated>
+      <id>https://jjjjye.github.io/Data-Partition</id>
+      <content type="html" xml:base="https://jjjjye.github.io/Data-Partition">&lt;h1 id=&quot;--contents&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt;  &lt;strong&gt;Contents&lt;/strong&gt;&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#Partition&quot;&gt;데이터 분할&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#UT&quot;&gt;Unbalanced Target&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;Partition&quot;&gt;&lt;i class=&quot;fa fa-play&quot;&gt;&lt;/i&gt; 데이터 분할&lt;/h2&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;데이터를-training-data와-test-data로만-나눈다면&quot;&gt;데이터를 Training Data와 Test Data로만 나눈다면?&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Training Data에만 적합된 모형이 구축됨으로써 오분류율은 감소하나  모형이 복잡해질 수도 있음!
+    &lt;ul&gt;
+      &lt;li&gt;이 과정에서 좋은 모형이라고 착각!&lt;/li&gt;
+      &lt;li&gt;과적합 위험 증가! (Training Data의 성능 &amp;gt; Validation Data의 성능 )&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;과적합을 방지하기 위해 3가지로 분할
+    &lt;ul&gt;
+      &lt;li&gt;Training Data
+        &lt;ul&gt;
+          &lt;li&gt;모형 구축 시 사용되는 데이터&lt;/li&gt;
+          &lt;li&gt;예측 혹은 분류 모델을 훈련&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Validation Data
+        &lt;ul&gt;
+          &lt;li&gt;모형의 모수들을 조정함으로써 최적의 모형 선택&lt;/li&gt;
+          &lt;li&gt;학습 데이터로부터 구축된 여러 모형들의 성능을 비교할 때 사용&lt;/li&gt;
+          &lt;li&gt;과적합 방지용&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Test Data
+        &lt;ul&gt;
+          &lt;li&gt;구축된 모형이 미래의 새로운 데이터에 대해 얼마만큼 예측/분류 성능을 보일지 평가할 때 사용&lt;/li&gt;
+          &lt;li&gt;모형 구축에 전혀 사용되지 않는 새로운 데이터&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h2 id=&quot;UT&quot;&gt;&lt;i class=&quot;fa fa-play&quot;&gt;&lt;/i&gt; Unbalaned Target&lt;/h2&gt;
+
+&lt;h3 id=&quot;분류모형에서-target-클래스-비율이-맞지-않다면&quot;&gt;분류모형에서 Target 클래스 비율이 맞지 않다면?&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Target 클래스 비율이 맞지 않다면 1:1로 맞춘 후 데이터 분할!&lt;/li&gt;
+  &lt;li&gt;Unbalanced Target을 해결하는 방법
+    &lt;ul&gt;
+      &lt;li&gt;upSample : 적은 쪽의 데이터를 중복추출하여 균형 맞춤&lt;/li&gt;
+      &lt;li&gt;downSample : 많은 쪽의 데이터를 적게 추출하여 균형 맞춤&lt;/li&gt;
+      &lt;li&gt;SMOTE (Synthetic Minority Oversampling Technique) : K-최근접 이웃기법을 이용하여 점들을 추가
+        &lt;ul&gt;
+          &lt;li&gt;Overlapping&lt;/li&gt;
+          &lt;li&gt;Tomek link : 최소 거리를 가지지만 서로 다른 클래스로 분류된 한 쌍의 데이터&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;SMOTE -&amp;gt; Tomek : 노이즈(SMOTE 실행 후 발생) 제거 후 근사적으로 1:1 매칭&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;만약 전체 Data에 대하여 1:1 매칭 후 데이터 분할을 했다면 원래 비율에 맞게 재조정 필요
+    &lt;ul&gt;
+      &lt;li&gt;비례식을 이용한 재조정&lt;/li&gt;
+      &lt;li&gt;과샘플링 가중치 이용&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>YeongEun Jeon</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="machine-learning" />
+      
+
+      
+        <summary type="html">Contents 데이터 분할 Unbalanced Target</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Machine Learning 강좌(1) - Machine Learning 기본</title>
+      <link href="https://jjjjye.github.io/ML-basic" rel="alternate" type="text/html" title="Machine Learning 강좌(1) - Machine Learning 기본" />
+      <published>2020-06-10T01:40:00+09:00</published>
+      <updated>2020-06-10T01:40:00+09:00</updated>
+      <id>https://jjjjye.github.io/ML-basic</id>
+      <content type="html" xml:base="https://jjjjye.github.io/ML-basic">&lt;p&gt;이곳은 Machine Learning  basic 입니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Package “rpart”와 “caret” 방법으로 의사결정나무를 실습하기 위해서 사용될 예제 데이터는 “Universal Bank_Main”로 유니버셜 은행의 고객들에 대한 데이터(출처 : Data Mining for Business Intelligence, Shmueli et al. 2010)이다. 데이터는 총 2500개이며, 변수의 갯수는 13개이다. 여기서 &lt;strong&gt;Target&lt;/strong&gt;은 &lt;code class=&quot;highlighter-rouge&quot;&gt;Person.Loan&lt;/code&gt;이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h1 id=&quot;contents&quot;&gt;&lt;strong&gt;Contents&lt;/strong&gt;&lt;/h1&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;[R Package “rpart”][&lt;strong&gt;1. R Package “rpart”&lt;/strong&gt;]
+    &lt;ul&gt;
+      &lt;li&gt;[데이터 불러오기][&lt;strong&gt;1-1. 데이터 불러오기&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[데이터 분할][&lt;strong&gt;1-2. 데이터 분할&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[모형 적합][&lt;strong&gt;1-3. 모형 적합&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[Tree 그림][&lt;strong&gt;1-4. Tree 그림&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[가지치기][&lt;strong&gt;1-5. 가지치기(과적합 문제 해결)&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[모형 평가][&lt;strong&gt;1-6. 모형 평가&lt;/strong&gt;]&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[R Package “caret”][&lt;strong&gt;2. R Package “caret”&lt;/strong&gt;]
+    &lt;ul&gt;
+      &lt;li&gt;[데이터 불러오기][&lt;strong&gt;2-1. 데이터 불러오기&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[데이터 분할][&lt;strong&gt;2-2. 데이터 분할&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[모형 적합][&lt;strong&gt;2-3. 모형 적합&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[Tree 그림][&lt;strong&gt;2-4. Tree 그림&lt;/strong&gt;]&lt;/li&gt;
+      &lt;li&gt;[모형 평가][&lt;strong&gt;2-5. 모형 평가&lt;/strong&gt;]&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;[모형 비교][&lt;strong&gt;3. 모형 비교&lt;/strong&gt;]&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;1-r-package-rpart&quot;&gt;&lt;strong&gt;1. R Package “rpart”&lt;/strong&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-1-데이터-불러오기&quot;&gt;&lt;strong&gt;1-1. 데이터 불러오기&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pacman&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p_load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;data.table&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dplyr&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UB&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paste&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getwd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Universal Bank_Main.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# 데이터 불러오기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                                                   &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# Data Frame 변환&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                                                         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# ID변수 제거&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# Convert To Factor&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Family&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Education&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Personal.Loan&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Securities.Account&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+          &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CD.Account&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Online&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CreditCard&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UB&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UB&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mutate_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as.factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                                         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# 범주형 변수 변환&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;glimpse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                                                            &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# 데이터 구조&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;i class=&quot;fa fa-glass&quot;&gt;&lt;/i&gt; ccc&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>YeongEun Jeon</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="machine-learning" />
+      
+
+      
+        <summary type="html">이곳은 Machine Learning basic 입니다.</summary>
+      
+
+      
+      
+    </entry>
+  
+</feed>

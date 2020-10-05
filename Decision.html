@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>Decision Tree</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- custom.css-->
+    <link rel="stylesheet" type="text/css" href="/assets/built/custom.css" />
+    <!--웹 폰트 설정-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- syntax.css -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="머신러닝" />
+    <link rel="shortcut icon" href="https://JJJJYE.github.io/assets/built/images/favicon.jpg" type="image/png" />
+    <link rel="canonical" href="https://JJJJYE.github.io/Decision" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Machine Learning with R" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Decision Tree" />
+    <meta property="og:description" content="By Yeong Eun Jeon, Jeongwook Lee and Jung In Seo Version : R-4.0.2 Package rpart와 caret 방법으로 의사결정나무를 실습하기 위해서 사용될 예제 데이터는 “Universal Bank_Main”로 유니버셜 은행의 고객들에 대한 데이터(출처 : Data Mining for Business Intelligence, Shmueli et al. 2010)이다. 데이터는 총 2500개이며, 변수의 갯수는 13개이다. 여기서 Target은 Person.Loan이다. Contents" />
+    <meta property="og:url" content="https://JJJJYE.github.io/Decision" />
+    <meta property="og:image" content="https://JJJJYE.github.io/assets/built/images/machine-logo.jpeg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2020-09-29T01:40:00+09:00" />
+    <meta property="article:modified_time" content="2020-09-29T01:40:00+09:00" />
+    <meta property="article:tag" content="Machine-learning-r" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Decision Tree" />
+    <meta name="twitter:description" content="By Yeong Eun Jeon, Jeongwook Lee and Jung In Seo Version : R-4.0.2 Package rpart와 caret 방법으로 의사결정나무를 실습하기 위해서 사용될 예제 데이터는 “Universal Bank_Main”로 유니버셜 은행의 고객들에 대한 데이터(출처 : Data Mining for Business Intelligence, Shmueli et al. 2010)이다. 데이터는 총 2500개이며, 변수의 갯수는 13개이다. 여기서 Target은 Person.Loan이다. Contents" />
+    <meta name="twitter:url" content="https://JJJJYE.github.io/" />
+    <meta name="twitter:image" content="https://JJJJYE.github.io/assets/built/images/machine-logo.jpeg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Machine Learning with R" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Machine-learning-r" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Machine Learning with R",
+        "logo": "https://JJJJYE.github.io/"
+    },
+    "url": "https://JJJJYE.github.io/Decision",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://JJJJYE.github.io/assets/built/images/machine-logo.jpeg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://JJJJYE.github.io/Decision"
+    },
+    "description": "By Yeong Eun Jeon, Jeongwook Lee and Jung In Seo Version : R-4.0.2 Package rpart와 caret 방법으로 의사결정나무를 실습하기 위해서 사용될 예제 데이터는 “Universal Bank_Main”로 유니버셜 은행의 고객들에 대한 데이터(출처 : Data Mining for Business Intelligence, Shmueli et al. 2010)이다. 데이터는 총 2500개이며, 변수의 갯수는 13개이다. 여기서 Target은 Person.Loan이다. Contents"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="Decision Tree" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="https://JJJJYE.github.io/">Machine Learning with R</a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+    <li class="nav-jekyll" role="menuitem"><a href="/tag/jekyll/">Jekyll</a></li>
+    <li class="nav-python" role="menuitem"><a href="/tag/python/">Python</a></li>
+    <li class="nav-machine-learning" role="menuitem"><a href="/tag/machine-learning/">Machine Learning</a></li>
+    <li class="nav-machine-learning-r" role="menuitem"><a href="/tag/machine-learning-r/">Machine Learning R</a></li>
+    <li class="nav-archive" role="menuitem">
+        <a href="/archive.html">All Posts</a>
+    </li>
+    <li class="nav-archive" role="menuitem">
+        <a href="/author_archive.html">Tag별 Posts</a>
+    </li>
+</ul>
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+            <a class="subscribe-button" href="#subscribe">Subscribe</a>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full  tag-machine-learning-r post tag-python ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="29 September 2020">29 September 2020</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/machine-learning-r/'>MACHINE-LEARNING-R</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">Decision Tree</h1>
+            </header>
+        <!--
+                    
+                    <figure class="post-full-image" style="background-image: url(/assets/built/images/machine-logo.jpeg)">
+                    </figure>
+                    
+  -->
+                    <section class="post-full-content">
+                        <div class="kg-card-markdown">
+                            <p><span style="color:blue"><strong>By Yeong Eun Jeon, Jeongwook Lee and Jung In Seo</strong></span></p>
+
+<p><span style="color:purple">Version : R-4.0.2</span></p>
+
+<hr />
+<p><img src="assets/built/images/2020-09-30-Decision_files/tree_package.png" alt="" width="800" height="600" /></p>
+
+<hr />
+
+<blockquote>
+  <p>Package <code class="highlighter-rouge">rpart</code>와 <code class="highlighter-rouge">caret</code> 방법으로 의사결정나무를 실습하기 위해서 사용될 예제 데이터는 “Universal Bank_Main”로 유니버셜 은행의 고객들에 대한 데이터(출처 : Data Mining for Business Intelligence, Shmueli et al. 2010)이다. 데이터는 총 2500개이며, 변수의 갯수는 13개이다. 여기서 <strong>Target</strong>은 <code class="highlighter-rouge">Person.Loan</code>이다.</p>
+</blockquote>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/data.png" alt="" width="800" height="600" /></p>
+
+<p><br /></p>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/variables.png" alt="" width="600" height="600" /></p>
+
+<p><br /></p>
+
+<h1 id="--contents"><span style="color:blue"><i class="fa fa-list-alt"></i></span>  <strong>Contents</strong></h1>
+
+<ul>
+  <li><a href="#rpart">R Package “rpart”</a>
+    <ul>
+      <li><a href="#import-data1">데이터 불러오기</a></li>
+      <li><a href="#data-partition1">데이터 분할</a></li>
+      <li><a href="#fit-model1">모형 적합</a></li>
+      <li><a href="#tree-plot1">Tree 그림</a></li>
+      <li><a href="#pune-tree">가지치기</a></li>
+      <li><a href="#e-m1">모형 평가</a></li>
+    </ul>
+  </li>
+  <li><a href="#caret">R Package “caret”</a>
+    <ul>
+      <li><a href="#import-data2">데이터 불러오기</a></li>
+      <li><a href="#data-partition2">데이터 분할</a></li>
+      <li><a href="#fit-model2">모형 적합</a></li>
+      <li><a href="#tree-plot2">Tree 그림</a></li>
+      <li><a href="#e-m2">모형 평가</a></li>
+    </ul>
+  </li>
+  <li><a href="#c-m">모형 비교</a></li>
+</ul>
+
+<hr />
+
+<h1 id="rpart"><strong>1. R Package “rpart”</strong></h1>
+
+<h2 id="import-data1"><strong>1-1. 데이터 불러오기</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"data.table"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dplyr"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">UB</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fread</span><span class="p">(</span><span class="n">paste</span><span class="p">(</span><span class="n">getwd</span><span class="p">(),</span><span class="s2">"Universal Bank_Main.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">"/"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">   </span><span class="c1"># 데이터 불러오기</span><span class="w">
+    </span><span class="n">data.frame</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">                                                   </span><span class="c1"># Data Frame 변환</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="w">                                                         </span><span class="c1"># ID변수 제거</span><span class="w">
+
+
+</span><span class="c1"># Convert To Factor</span><span class="w">
+</span><span class="n">cols</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Family"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Education"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Personal.Loan"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Securities.Account"</span><span class="p">,</span><span class="w"> 
+          </span><span class="s2">"CD.Account"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Online"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CreditCard"</span><span class="p">)</span><span class="w">
+</span><span class="n">UB</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+    </span><span class="n">mutate_at</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span><span class="w"> </span><span class="n">as.factor</span><span class="p">)</span><span class="w">                                         </span><span class="c1"># 범주형 변수 변환</span><span class="w">
+    
+</span><span class="n">glimpse</span><span class="p">(</span><span class="n">UB</span><span class="p">)</span><span class="w">                                                            </span><span class="c1"># 데이터 구조</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Rows: 2,500
+## Columns: 13
+## $ Age                &lt;int&gt; 25, 45, 39, 35, 35, 37, 53, 50, 35, 34, 65, 29, ...
+## $ Experience         &lt;int&gt; 1, 19, 15, 9, 8, 13, 27, 24, 10, 9, 39, 5, 23, 3...
+## $ Income             &lt;int&gt; 49, 34, 11, 100, 45, 29, 72, 22, 81, 180, 105, 4...
+## $ ZIP.Code           &lt;int&gt; 91107, 90089, 94720, 94112, 91330, 92121, 91711,...
+## $ Family             &lt;fct&gt; 4, 3, 1, 1, 4, 4, 2, 1, 3, 1, 4, 3, 2, 4, 1, 1, ...
+## $ CCAvg              &lt;dbl&gt; 1.6, 1.5, 1.0, 2.7, 1.0, 0.4, 1.5, 0.3, 0.6, 8.9...
+## $ Education          &lt;fct&gt; 1, 1, 1, 2, 2, 2, 2, 3, 2, 3, 3, 2, 3, 2, 1, 3, ...
+## $ Mortgage           &lt;int&gt; 0, 0, 0, 0, 0, 155, 0, 0, 104, 0, 0, 0, 0, 0, 0,...
+## $ Personal.Loan      &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, ...
+## $ Securities.Account &lt;fct&gt; 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, ...
+## $ CD.Account         &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ Online             &lt;fct&gt; 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, ...
+## $ CreditCard         &lt;fct&gt; 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, ...
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="data-partition1"><strong>1-2. 데이터 분할</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Partition (Traning Data : Test Data = 7:3)</span><span class="w">
+
+</span><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"caret"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">y</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="w">                            </span><span class="c1"># Target</span><span class="w">
+ 
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">200</span><span class="p">)</span><span class="w">
+</span><span class="n">ind</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">createDataPartition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">       </span><span class="c1"># Training Data를 70%로 추출</span><span class="w">
+</span><span class="n">UB.trd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="p">[</span><span class="n">ind</span><span class="o">$</span><span class="n">Resample1</span><span class="p">,]</span><span class="w">                          </span><span class="c1"># Traning Data</span><span class="w">
+</span><span class="n">UB.ted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="p">[</span><span class="o">-</span><span class="n">ind</span><span class="o">$</span><span class="n">Resample1</span><span class="p">,]</span><span class="w">                         </span><span class="c1"># Test Data</span><span class="w">
+
+</span><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">caret</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="fit-model1"><strong>1-3. 모형 적합</strong></h2>
+
+<p>의사결정나무모형을 형성하기 위해 사용될 첫번째 Package는 <code class="highlighter-rouge">"rpart"</code>이다. <code class="highlighter-rouge">"rpart"</code>는 수정된 CART를 사용하며, CP (Complexity Parameter)를 중심으로 분석한다. 게다가 <code class="highlighter-rouge">"rpart"</code>는 Cross Validation을 이용하여 의사결정나무를 생성하며, defalut값은 10-fold Cross Validation이다. 또한 가독성 좋은 그래프가 있기 때문에 트리를 시각화하기에 좋다.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rpart</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">formula</code> : Target과 예측 변수에 대한 공식으로써 일반적으로 <code class="highlighter-rouge">Target ~ 예측변수</code>로 적는다.</li>
+  <li><code class="highlighter-rouge">data</code> : <code class="highlighter-rouge">formula</code>의 변수들이 있는 데이터 프레임</li>
+  <li><code class="highlighter-rouge">method</code> : Target이 범주형이면 <code class="highlighter-rouge">"class"</code>, Target이 수치형이면 <code class="highlighter-rouge">"anova"</code>를 해준다.</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"rpart"</span><span class="p">,</span><span class="w">                   </span><span class="c1"># For Decision Tree</span><span class="w">
+               </span><span class="s2">"rattle"</span><span class="p">,</span><span class="w"> </span><span class="s2">"rpart.plot"</span><span class="p">)</span><span class="w">    </span><span class="c1"># For fancyRpartPlot(가독성 좋은 그래프) </span><span class="w">
+
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">200</span><span class="p">)</span><span class="w">                             </span><span class="c1"># Seed 고정 For Cross Validation   </span><span class="w">
+</span><span class="n">rContol</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rpart.control</span><span class="p">(</span><span class="n">xval</span><span class="o">=</span><span class="m">10</span><span class="p">)</span><span class="w">    </span><span class="c1"># xval : Number Of Cross Validation</span><span class="w">
+</span><span class="n">UB.trd.rtree</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rpart</span><span class="p">(</span><span class="n">Personal.Loan</span><span class="o">~</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">UB.trd</span><span class="p">,</span><span class="w">                 
+                      </span><span class="n">method</span><span class="o">=</span><span class="s2">"class"</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rContol</span><span class="p">)</span><span class="w">         
+
+</span><span class="n">summary</span><span class="p">(</span><span class="n">UB.trd.rtree</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Call:
+## rpart(formula = Personal.Loan ~ ., data = UB.trd, method = "class", 
+##     control = rContol)
+##   n= 1751 
+## 
+##           CP nsplit rel error    xerror       xstd
+## 1 0.32500000      0 1.0000000 1.0000000 0.07060066
+## 2 0.15000000      2 0.3500000 0.3777778 0.04491392
+## 3 0.01944444      3 0.2000000 0.2111111 0.03387310
+## 4 0.01111111      5 0.1611111 0.2222222 0.03473277
+## 5 0.01000000      7 0.1388889 0.2222222 0.03473277
+## 
+## Variable importance
+##     Income  Education     Family      CCAvg CD.Account   Mortgage   ZIP.Code 
+##         29         28         20         13          5          3          1 
+##        Age Experience 
+##          1          1 
+## 
+## Node number 1: 1751 observations,    complexity param=0.325
+##   predicted class=0  expected loss=0.1027984  P(node) =1
+##     class counts:  1571   180
+##    probabilities: 0.897 0.103 
+##   left son=2 (1366 obs) right son=3 (385 obs)
+##   Primary splits:
+##       Income     &lt; 106.5   to the left,  improve=94.968130, (0 missing)
+##       CCAvg      &lt; 2.95    to the left,  improve=69.046700, (0 missing)
+##       CD.Account splits as  LR,          improve=41.226300, (0 missing)
+##       Mortgage   &lt; 293.5   to the left,  improve=14.467750, (0 missing)
+##       Education  splits as  LRR,         improve= 7.681315, (0 missing)
+##   Surrogate splits:
+##       CCAvg      &lt; 3.25    to the left,  agree=0.868, adj=0.400, (0 split)
+##       Mortgage   &lt; 339.5   to the left,  agree=0.802, adj=0.101, (0 split)
+##       CD.Account splits as  LR,          agree=0.786, adj=0.026, (0 split)
+## 
+## Node number 2: 1366 observations,    complexity param=0.01111111
+##   predicted class=0  expected loss=0.01537335  P(node) =0.7801256
+##     class counts:  1345    21
+##    probabilities: 0.985 0.015 
+##   left son=4 (1277 obs) right son=5 (89 obs)
+##   Primary splits:
+##       CCAvg      &lt; 2.95    to the left,  improve=9.2644320, (0 missing)
+##       Income     &lt; 98.5    to the left,  improve=3.5382100, (0 missing)
+##       CD.Account splits as  LR,          improve=1.1082890, (0 missing)
+##       Mortgage   &lt; 220.5   to the left,  improve=0.6886484, (0 missing)
+##       Experience &lt; 38.5    to the left,  improve=0.2000360, (0 missing)
+## 
+## Node number 3: 385 observations,    complexity param=0.325
+##   predicted class=0  expected loss=0.412987  P(node) =0.2198744
+##     class counts:   226   159
+##    probabilities: 0.587 0.413 
+##   left son=6 (242 obs) right son=7 (143 obs)
+##   Primary splits:
+##       Education  splits as  LRR,         improve=111.984200, (0 missing)
+##       Family     splits as  LLRR,        improve= 73.753990, (0 missing)
+##       CD.Account splits as  LR,          improve= 27.998710, (0 missing)
+##       Income     &lt; 156.5   to the left,  improve= 11.193100, (0 missing)
+##       CCAvg      &lt; 6.635   to the right, improve=  4.353303, (0 missing)
+##   Surrogate splits:
+##       Family     splits as  LLRR,        agree=0.743, adj=0.308, (0 split)
+##       CD.Account splits as  LR,          agree=0.683, adj=0.147, (0 split)
+##       Income     &lt; 173.5   to the left,  agree=0.642, adj=0.035, (0 split)
+##       CCAvg      &lt; 8.85    to the left,  agree=0.634, adj=0.014, (0 split)
+##       ZIP.Code   &lt; 90021.5 to the right, agree=0.631, adj=0.007, (0 split)
+## 
+## Node number 4: 1277 observations
+##   predicted class=0  expected loss=0  P(node) =0.7292975
+##     class counts:  1277     0
+##    probabilities: 1.000 0.000 
+## 
+## Node number 5: 89 observations,    complexity param=0.01111111
+##   predicted class=0  expected loss=0.2359551  P(node) =0.0508281
+##     class counts:    68    21
+##    probabilities: 0.764 0.236 
+##   left son=10 (73 obs) right son=11 (16 obs)
+##   Primary splits:
+##       Income     &lt; 98.5    to the left,  improve=5.904956, (0 missing)
+##       CD.Account splits as  LR,          improve=4.645443, (0 missing)
+##       CCAvg      &lt; 3.15    to the right, improve=3.739411, (0 missing)
+##       Experience &lt; 31.5    to the left,  improve=2.313744, (0 missing)
+##       Mortgage   &lt; 86.5    to the left,  improve=2.146298, (0 missing)
+##   Surrogate splits:
+##       Age        &lt; 62.5    to the left,  agree=0.843, adj=0.125, (0 split)
+##       Experience &lt; 38.5    to the left,  agree=0.843, adj=0.125, (0 split)
+##       ZIP.Code   &lt; 90061.5 to the right, agree=0.843, adj=0.125, (0 split)
+## 
+## Node number 6: 242 observations,    complexity param=0.15
+##   predicted class=0  expected loss=0.1198347  P(node) =0.1382067
+##     class counts:   213    29
+##    probabilities: 0.880 0.120 
+##   left son=12 (211 obs) right son=13 (31 obs)
+##   Primary splits:
+##       Family     splits as  LLRR,        improve=47.3076500, (0 missing)
+##       CD.Account splits as  LR,          improve= 8.0685060, (0 missing)
+##       Mortgage   &lt; 279.5   to the left,  improve= 1.5428930, (0 missing)
+##       CCAvg      &lt; 6.635   to the right, improve= 1.2562530, (0 missing)
+##       ZIP.Code   &lt; 95057   to the left,  improve= 0.9027978, (0 missing)
+##   Surrogate splits:
+##       CD.Account splits as  LR,          agree=0.880, adj=0.065, (0 split)
+##       Mortgage   &lt; 566     to the left,  agree=0.876, adj=0.032, (0 split)
+## 
+## Node number 7: 143 observations,    complexity param=0.01944444
+##   predicted class=1  expected loss=0.09090909  P(node) =0.08166762
+##     class counts:    13   130
+##    probabilities: 0.091 0.909 
+##   left son=14 (25 obs) right son=15 (118 obs)
+##   Primary splits:
+##       Income     &lt; 116.5   to the left,  improve=11.1563600, (0 missing)
+##       CCAvg      &lt; 2.4     to the left,  improve= 2.6908830, (0 missing)
+##       Experience &lt; 2.5     to the left,  improve= 2.4008740, (0 missing)
+##       Age        &lt; 29.5    to the left,  improve= 2.2161600, (0 missing)
+##       CD.Account splits as  LR,          improve= 0.9500891, (0 missing)
+## 
+## Node number 10: 73 observations
+##   predicted class=0  expected loss=0.1506849  P(node) =0.04169046
+##     class counts:    62    11
+##    probabilities: 0.849 0.151 
+## 
+## Node number 11: 16 observations
+##   predicted class=1  expected loss=0.375  P(node) =0.009137636
+##     class counts:     6    10
+##    probabilities: 0.375 0.625 
+## 
+## Node number 12: 211 observations
+##   predicted class=0  expected loss=0  P(node) =0.1205026
+##     class counts:   211     0
+##    probabilities: 1.000 0.000 
+## 
+## Node number 13: 31 observations
+##   predicted class=1  expected loss=0.06451613  P(node) =0.01770417
+##     class counts:     2    29
+##    probabilities: 0.065 0.935 
+## 
+## Node number 14: 25 observations,    complexity param=0.01944444
+##   predicted class=0  expected loss=0.48  P(node) =0.01427756
+##     class counts:    13    12
+##    probabilities: 0.520 0.480 
+##   left son=28 (13 obs) right son=29 (12 obs)
+##   Primary splits:
+##       CCAvg      &lt; 2.4     to the left,  improve=3.3646150, (0 missing)
+##       ZIP.Code   &lt; 93060   to the right, improve=2.4938890, (0 missing)
+##       Age        &lt; 29.5    to the left,  improve=1.2447060, (0 missing)
+##       Experience &lt; 7       to the left,  improve=1.0800000, (0 missing)
+##       Education  splits as  -RL,         improve=0.9605195, (0 missing)
+##   Surrogate splits:
+##       ZIP.Code   &lt; 94014.5 to the right, agree=0.88, adj=0.750, (0 split)
+##       Age        &lt; 38.5    to the left,  agree=0.72, adj=0.417, (0 split)
+##       Experience &lt; 18.5    to the left,  agree=0.72, adj=0.417, (0 split)
+##       Education  splits as  -RL,         agree=0.72, adj=0.417, (0 split)
+##       Income     &lt; 113.5   to the left,  agree=0.68, adj=0.333, (0 split)
+## 
+## Node number 15: 118 observations
+##   predicted class=1  expected loss=0  P(node) =0.06739006
+##     class counts:     0   118
+##    probabilities: 0.000 1.000 
+## 
+## Node number 28: 13 observations
+##   predicted class=0  expected loss=0.2307692  P(node) =0.007424329
+##     class counts:    10     3
+##    probabilities: 0.769 0.231 
+## 
+## Node number 29: 12 observations
+##   predicted class=1  expected loss=0.25  P(node) =0.006853227
+##     class counts:     3     9
+##    probabilities: 0.250 0.750
+</code></pre></div></div>
+
+<p>먼저 첫번째로 나오는 Table에 대한 용어 설명이다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">CP</code> : Complexity Parameter로 Training Data에 대한 오분류율+나무 크기에 대한 벌점 요인으로 계산된다. 또한 CP는 나무의 복잡도를 나타냄으로써 나무의 크기를 통제하고 최적의 크기를 선택할 수 있게 해준다.</li>
+  <li><code class="highlighter-rouge">nsplit</code> : 분리의 횟수</li>
+  <li><code class="highlighter-rouge">rel error</code> : $1-R^2$ root mean square error로 모형을 추정하는 데 사용된 데이터의 예측에 대한 오차</li>
+  <li><code class="highlighter-rouge">xerror</code> : Cross Validation Error</li>
+  <li><code class="highlighter-rouge">xstd</code> : <code class="highlighter-rouge">xerror</code>의 표준오차</li>
+</ul>
+
+<p><code class="highlighter-rouge">Variable importance</code>는 변수중요도로써, Income $&gt;$ Education $&gt;$ Family 임을 알 수 있다.  <code class="highlighter-rouge">Node number 1</code> 은 첫번째 노드에 대한 설명으로써 총 1751개의 관측값이 있으며, <code class="highlighter-rouge">predicted class</code>=0, <code class="highlighter-rouge">CP</code>=0.325, <code class="highlighter-rouge">expected loss (불순도)</code>= 0.1027984이다. 전체 관측값 1751개 중 클래스 “0”은 1571, 클래스 “1”은 180개 이며, 비율은 각각 0.897, 0.103이다. <code class="highlighter-rouge">left son = 2 (1366 obs)</code>는 왼쪽 자식 노드의 번호는 2 이고 1366개의 관측값이 있다는 뜻이다.</p>
+
+<hr />
+
+<h2 id="tree-plot1"><strong>1-4. Tree 그림</strong></h2>
+
+<h3 id="1-4-1-fancyrpartplot"><strong>1-4-1. “fancyRpartPlot”</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fancyRpartPlot</span><span class="p">(</span><span class="n">UB.trd.rtree</span><span class="p">)</span><span class="w"> </span><span class="c1"># 가독성 좋은 그래프</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-5-1.jpg" alt="" /></p>
+
+<h3 id="1-4-2-vistree"><strong>1-4-2. “visTree”</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"visNetwork"</span><span class="p">,</span><span class="s2">"sparkline"</span><span class="p">)</span><span class="w">  </span><span class="c1"># 네트워크 기반 그래프</span><span class="w">
+</span><span class="n">visTree</span><span class="p">(</span><span class="n">UB.trd.rtree</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/network.png" alt="" /></p>
+
+<hr />
+
+<h2 id="pune-tree"><strong>1-5. 가지치기(과적합 문제 해결)</strong></h2>
+
+<p>과적합 문제를 해결하기 위해 가지치기를 수행한다. <code class="highlighter-rouge">rpart</code>에서 최적의  <code class="highlighter-rouge">CP</code> 값을 찾는 것이 중요하며, 이것은 <code class="highlighter-rouge">xerror</code>가 최소가 되는 <code class="highlighter-rouge">CP</code>를 찾으면 된다.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">table</span><span class="w">              </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB.trd.rtree</span><span class="o">$</span><span class="n">cptable</span><span class="w">             </span><span class="c1"># CP Table</span><span class="w">
+
+</span><span class="n">low.error</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which.min</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="w"> </span><span class="p">,</span><span class="s2">"xerror"</span><span class="p">])</span><span class="w">     </span><span class="c1"># Table의 ”xerror”열에서 가장 낮은 값 위치 추출</span><span class="w">
+</span><span class="n">cp.best</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">table</span><span class="p">[</span><span class="n">low.error</span><span class="p">,</span><span class="w"> </span><span class="s2">"CP"</span><span class="p">]</span><span class="w">           </span><span class="c1"># ”CP”에서 low.error에 해당하는 CP 선택</span><span class="w">
+
+</span><span class="n">UB.trd.prune.rtree</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prune</span><span class="p">(</span><span class="n">UB.trd.rtree</span><span class="p">,</span><span class="w"> </span><span class="n">cp</span><span class="o">=</span><span class="n">cp.best</span><span class="p">)</span><span class="w">  </span><span class="c1"># prune(트리모형, 최적의 “CP”)</span><span class="w">
+
+</span><span class="n">UB.trd.prune.rtree</span><span class="o">$</span><span class="n">cptable</span><span class="w">                             </span><span class="c1"># 최종 모형에 대한 CP Table	</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##           CP nsplit rel error    xerror       xstd
+## 1 0.32500000      0      1.00 1.0000000 0.07060066
+## 2 0.15000000      2      0.35 0.3777778 0.04491392
+## 3 0.01944444      3      0.20 0.2111111 0.03387310
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>가지치기를 함으로써 최종 모형이 완성되고 최종 모형에 대한 Tree 그림은 다음과 같다.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fancyRpartPlot</span><span class="p">(</span><span class="n">UB.trd.prune.rtree</span><span class="p">)</span><span class="w">        </span><span class="c1"># 가독성 좋은 그래프                           </span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-8-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">visTree</span><span class="p">(</span><span class="n">UB.trd.prune.rtree</span><span class="p">)</span><span class="w">   </span><span class="c1"># 네트워크 기반 그래프</span><span class="w">
+</span></code></pre></div></div>
+
+<!--html_preserve-->
+<div id="htmlwidget-16c45634b3674052adc8" style="width:100%;height:600px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-16c45634b3674052adc8">{"x":{"nodes":{"id":[1,2,3,6,12,13,7],"label":["Income","0","Education","Family","0","1","1"],"level":[1,2,2,3,4,4,3],"color":["#F1B8C2","#7D91B6","#A9D1A5","#B4C7ED","#7D91B6","#B9828C","#B9828C"],"value":[1751,1366,385,242,211,31,143],"shape":["dot","square","dot","dot","square","square","square"],"title":["<div style=\"text-align:center;\">N : <b>100%<\/b> (1751)<br>Complexity : <b>0.325<\/b><br>0 : <b>89.7%<\/b> (1571)<br>1 : <b>10.3%<\/b> (180)<\/div>","<div style=\"text-align:center;\">N : <b>78%<\/b> (1366)<br>Complexity : <b>0.011<\/b><br>0 : <b>98.5%<\/b> (1345)<br>1 : <b>1.5%<\/b> (21)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> < 106.5<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>22%<\/b> (385)<br>Complexity : <b>0.325<\/b><br>0 : <b>58.7%<\/b> (226)<br>1 : <b>41.3%<\/b> (159)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> >= 106.5<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>13.8%<\/b> (242)<br>Complexity : <b>0.15<\/b><br>0 : <b>88%<\/b> (213)<br>1 : <b>12%<\/b> (29)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> >= 106.5<br><b> Education <\/b> 1<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>12.1%<\/b> (211)<br>Complexity : <b>0.01<\/b><br>0 : <b>100%<\/b> (211)<br>1 : <b>0%<\/b> (0)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> >= 106.5<br><b> Education <\/b> 1<br><b> Family <\/b> 1, 2<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>1.8%<\/b> (31)<br>Complexity : <b>0<\/b><br>0 : <b>6.5%<\/b> (2)<br>1 : <b>93.5%<\/b> (29)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> >= 106.5<br><b> Education <\/b> 1<br><b> Family <\/b> 3, 4<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>","<div style=\"text-align:center;\">N : <b>8.2%<\/b> (143)<br>Complexity : <b>0.019<\/b><br>0 : <b>9.1%<\/b> (13)<br>1 : <b>90.9%<\/b> (130)<hr class = \"rPartvisNetwork\">\n<div class =\"showOnMe2\"><div style=\"text-align:center;\"><U style=\"color:blue;\" class = \"classActivePointer\">Rules<\/U><\/div>\n<div class=\"showMeRpartTTp2\" style=\"display:none;\">\n<b> Income <\/b> >= 106.5<br><b> Education <\/b> 2, 3<\/script><script type=\"text/javascript\">$(document).ready(function(){\n$(\".showOnMe2\").click(function(){\n$(\".showMeRpartTTp2\").toggle();\n$.sparkline_display_visible();\n});\n  });<\/script><\/div><\/div>\n\n<\/div>"],"fixed":[true,true,true,true,true,true,true],"colorClust":["#7D91B6","#7D91B6","#7D91B6","#7D91B6","#7D91B6","#B9828C","#B9828C"],"labelClust":["0","0","0","0","0","1","1"],"Leaf":[0,1,0,0,1,1,1],"font.size":[16,16,16,16,16,16,16],"scaling.min":[22.5,22.5,22.5,22.5,22.5,22.5,22.5],"scaling.max":[22.5,22.5,22.5,22.5,22.5,22.5,22.5]},"edges":{"id":["edge1","edge2","edge3","edge4","edge5","edge6"],"from":[1,1,3,6,6,3],"to":[2,3,6,12,13,7],"label":["< 106.5",">= 106.5","1","1, 2","3, 4","2, 3"],"value":[1366,385,242,211,31,143],"title":["<div style=\"text-align:center;\"><b>Income<\/b><\/div><div style=\"text-align:center;\"><106.5<\/div>","<div style=\"text-align:center;\"><b>Income<\/b><\/div><div style=\"text-align:center;\">>=106.5<\/div>","<div style=\"text-align:center;\"><b>Education<\/b><\/div><div style=\"text-align:center;\">1<\/div>","<div style=\"text-align:center;\"><b>Family<\/b><\/div><div style=\"text-align:center;\">1<\/div><div style=\"text-align:center;\">2<\/div>","<div style=\"text-align:center;\"><b>Family<\/b><\/div><div style=\"text-align:center;\">3<\/div><div style=\"text-align:center;\">4<\/div>","<div style=\"text-align:center;\"><b>Education<\/b><\/div><div style=\"text-align:center;\">2<\/div><div style=\"text-align:center;\">3<\/div>"],"color":["#8181F7","#8181F7","#8181F7","#8181F7","#8181F7","#8181F7"],"font.size":[14,14,14,14,14,14],"font.align":["horizontal","horizontal","horizontal","horizontal","horizontal","horizontal"],"smooth.enabled":[true,true,true,true,true,true],"smooth.type":["cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier","cubicBezier"],"smooth.roundness":[0.5,0.5,0.5,0.5,0.5,0.5]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD"}},"interaction":{"dragNodes":false,"selectConnectedEdges":false,"tooltipDelay":500},"edges":{"scaling":{"label":{"enabled":false}}}},"groups":null,"width":"100%","height":"600px","idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"footer":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;"},"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":50000,"to":0},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":true,"resetHighlight":true,"clusterOptions":{"fixed":true,"physics":false},"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;\n                      white-space: nowrap;\n                      font-family: cursive;font-size:12px;font-color:purple;background-color: #E6E6E6;\n                      border-radius: 15px;","OnceEvents":{"stabilized":"function() { \n        this.setOptions({layout:{hierarchical:false}, physics:{solver:'barnesHut', enabled:true, stabilization : false}, nodes : {physics : false, fixed : true}});\n    }"},"legend":{"width":0.1,"useGroups":false,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Education","Family","Income","0","1"],"color":["#A9D1A5","#B4C7ED","#F1B8C2","#7D91B6","#B9828C"],"shape":["dot","dot","dot","square","square"],"size":[22,22,22,22,22],"Leaf":[0,0,0,1,1],"font.size":[16,16,16,16,16],"id":[10000,10001,10002,10003,10004]},"nodesToDataframe":true},"tree":{"updateShape":true,"shapeVar":"dot","shapeY":"square","colorVar":{"variable":["Income","Education","Family"],"color":["#F1B8C2","#A9D1A5","#B4C7ED"]},"colorY":{"colorY":{"modality":["0","1"],"color":["#7D91B6","#B9828C"]},"vardecidedClust":["0","0","0","0","0","1","1"]}},"export":{"type":"png","css":"float:right;-webkit-border-radius: 10;\n                  -moz-border-radius: 10;\n                  border-radius: 10px;\n                  font-family: Arial;\n                  color: #ffffff;\n                  font-size: 12px;\n                  background: #090a0a;\n                  padding: 4px 8px 4px 4px;\n                  text-decoration: none;","background":"#fff","name":"network.png","label":"Export as png"}},"evals":["OnceEvents.stabilized"],"jsHooks":[]}</script>
+<!--/html_preserve-->
+
+<hr />
+
+<h2 id="e-m1"><strong>1-6. 모형 평가</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 적합된 모형에 대하여 Test Data 예측</span><span class="w">
+</span><span class="n">test.rtree</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">UB.trd.prune.rtree</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">UB.ted</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s2">"class"</span><span class="p">)</span><span class="w">  </span><span class="c1"># predict(트리모형, Test Data)       </span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="1-6-1-confusionmatrix"><strong>1-6-1. ConfusionMatrix</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"caret"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">CM</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">confusionMatrix</span><span class="p">(</span><span class="n">test.rtree</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">,</span><span class="w"> </span><span class="n">positive</span><span class="o">=</span><span class="s2">"1"</span><span class="p">)</span><span class="w">  </span><span class="c1"># confusionMatrix(예측 클래스, 실제 클래스, positive="관심클래스")</span><span class="w">
+</span><span class="n">CM</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1
+##          0 656  12
+##          1  17  64
+##                                           
+##                Accuracy : 0.9613          
+##                  95% CI : (0.9449, 0.9739)
+##     No Information Rate : 0.8985          
+##     P-Value [Acc &gt; NIR] : 1.228e-10       
+##                                           
+##                   Kappa : 0.7937          
+##                                           
+##  Mcnemar's Test P-Value : 0.4576          
+##                                           
+##             Sensitivity : 0.84211         
+##             Specificity : 0.97474         
+##          Pos Pred Value : 0.79012         
+##          Neg Pred Value : 0.98204         
+##              Prevalence : 0.10147         
+##          Detection Rate : 0.08545         
+##    Detection Prevalence : 0.10814         
+##       Balanced Accuracy : 0.90842         
+##                                           
+##        'Positive' Class : 1               
+## 
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">caret</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="1-6-2-roc-곡선"><strong>1-6-2. ROC 곡선</strong></h3>
+<p><br /></p>
+
+<h4 id="1-package-proc"><strong>1) Package “pROC”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"pROC"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">UB.trd.prune.rtree</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">UB.ted</span><span class="p">)</span><span class="w"> </span><span class="c1"># Training Data로 적합시킨 모형에 대한 Test Data의 각 클래스에 대한 예측 확률</span><span class="w">
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">test.rtree.prob</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">                         </span><span class="c1"># "1"에 대한 예측 확률</span><span class="w">
+
+
+</span><span class="n">ac</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">))</span><span class="w">   </span><span class="c1"># 범주형을 숫자형으로 변환할 때 문자형으로 변환한 뒤 숫자형으로 변환해야함</span><span class="w">
+</span><span class="n">rpp</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">)</span><span class="w">                      </span><span class="c1"># "1"에 대한 예측 확률</span><span class="w">
+
+</span><span class="n">rtree.roc</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">roc</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span><span class="w"> </span><span class="n">rpp</span><span class="p">,</span><span class="w"> </span><span class="n">plot</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s2">"red"</span><span class="p">)</span><span class="w">                  </span><span class="c1"># roc(실제 클래스, 예측 확률)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Setting levels: control = 0, case = 1
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Setting direction: controls &lt; cases
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">auc</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">auc</span><span class="p">(</span><span class="n">rtree.roc</span><span class="p">),</span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="n">auc</span><span class="p">,</span><span class="w"> </span><span class="n">bty</span><span class="o">=</span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-12-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">pROC</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="2-package-epi"><strong>2) Package “Epi”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"Epi"</span><span class="p">)</span><span class="w">       
+</span><span class="c1"># install_version("etm", version = "1.1", repos = "http://cran.us.r-project.org")</span><span class="w">
+
+</span><span class="n">ROC</span><span class="p">(</span><span class="n">rpp</span><span class="p">,</span><span class="w"> </span><span class="n">ac</span><span class="p">,</span><span class="w"> </span><span class="n">plot</span><span class="o">=</span><span class="s2">"ROC"</span><span class="p">)</span><span class="w">   </span><span class="c1"># ROC(예측 확률, 실제 클래스) / 최적의 Cutoff Value 예측 가능</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-13-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">Epi</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="3-package-rocr"><strong>3) Package “ROCR”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"ROCR"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">rtree.pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prediction</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">)</span><span class="w">    </span><span class="c1"># prediction(예측 확률, 실제 클레스)  </span><span class="w">
+
+</span><span class="n">rtree.perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"tpr"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fpr"</span><span class="p">)</span><span class="w">                </span><span class="c1"># performance(, "민감도", "1-특이도")                      </span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">rtree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">)</span><span class="w">                                       </span><span class="c1"># ROC Curve</span><span class="w">
+
+</span><span class="n">perf.auc</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"auc"</span><span class="p">)</span><span class="w">                       </span><span class="c1"># AUC</span><span class="w">
+</span><span class="n">auc</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">attributes</span><span class="p">(</span><span class="n">perf.auc</span><span class="p">)</span><span class="o">$</span><span class="n">y.values</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="n">auc</span><span class="p">,</span><span class="w"> </span><span class="n">bty</span><span class="o">=</span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-14-1.jpg" alt="" /></p>
+
+<h3 id="1-6-3-향상-차트"><strong>1-6-3. 향상 차트</strong></h3>
+
+<p><br /></p>
+
+<h4 id="1-package-rocr"><strong>1) Package “ROCR”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rtree.perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"lift"</span><span class="p">,</span><span class="s2">"rpp"</span><span class="p">)</span><span class="w">                </span><span class="c1"># Lift Chart                      </span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">rtree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s2">"lift curve"</span><span class="p">,</span><span class="w"> </span><span class="n">colorize</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-15-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">ROCR</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="2-package-lift"><strong>2) Package “lift”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"lift"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">plotLift</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">,</span><span class="w"> </span><span class="n">cumulative</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">n.buckets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">24</span><span class="p">)</span><span class="w"> </span><span class="c1"># plotLift(예측 확률, 실제 클래스)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-16-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TopDecileLift</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">)</span><span class="w">		                        </span><span class="c1"># Top 10% 향상도 출력</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 7.753
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">lift</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h1 id="caret"><strong>2. R Package “caret”</strong></h1>
+
+<h2 id="import-data2"><strong>2-1. 데이터 불러오기</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"data.table"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dplyr"</span><span class="p">)</span><span class="w">         
+
+
+</span><span class="n">UB</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fread</span><span class="p">(</span><span class="n">paste</span><span class="p">(</span><span class="n">getwd</span><span class="p">(),</span><span class="s2">"Universal Bank_Main.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">"/"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">    </span><span class="c1"># 데이터 불러오기</span><span class="w">
+   </span><span class="n">data.frame</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">                                                     </span><span class="c1"># Data Frame 변환</span><span class="w">
+   </span><span class="n">mutate</span><span class="p">(</span><span class="n">Personal.Loan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">Personal.Loan</span><span class="o">==</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">,</span><span class="s2">"no"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">     </span><span class="c1"># Character For Classification</span><span class="w">
+   </span><span class="n">select</span><span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="w">                                                           </span><span class="c1"># ID변수 제거</span><span class="w">
+
+
+</span><span class="c1"># Convert To Factor</span><span class="w">
+</span><span class="n">cols</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Family"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Education"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Personal.Loan"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Securities.Account"</span><span class="p">,</span><span class="w"> 
+          </span><span class="s2">"CD.Account"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Online"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CreditCard"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">UB</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">mutate_at</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span><span class="w"> </span><span class="n">as.factor</span><span class="p">)</span><span class="w">                                            </span><span class="c1"># 범주형 변수 변환</span><span class="w">
+
+</span><span class="n">glimpse</span><span class="p">(</span><span class="n">UB</span><span class="p">)</span><span class="w">                                                             </span><span class="c1"># 데이터 구조</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Rows: 2,500
+## Columns: 13
+## $ Age                &lt;int&gt; 25, 45, 39, 35, 35, 37, 53, 50, 35, 34, 65, 29, ...
+## $ Experience         &lt;int&gt; 1, 19, 15, 9, 8, 13, 27, 24, 10, 9, 39, 5, 23, 3...
+## $ Income             &lt;int&gt; 49, 34, 11, 100, 45, 29, 72, 22, 81, 180, 105, 4...
+## $ ZIP.Code           &lt;int&gt; 91107, 90089, 94720, 94112, 91330, 92121, 91711,...
+## $ Family             &lt;fct&gt; 4, 3, 1, 1, 4, 4, 2, 1, 3, 1, 4, 3, 2, 4, 1, 1, ...
+## $ CCAvg              &lt;dbl&gt; 1.6, 1.5, 1.0, 2.7, 1.0, 0.4, 1.5, 0.3, 0.6, 8.9...
+## $ Education          &lt;fct&gt; 1, 1, 1, 2, 2, 2, 2, 3, 2, 3, 3, 2, 3, 2, 1, 3, ...
+## $ Mortgage           &lt;int&gt; 0, 0, 0, 0, 0, 155, 0, 0, 104, 0, 0, 0, 0, 0, 0,...
+## $ Personal.Loan      &lt;fct&gt; no, no, no, no, no, no, no, no, no, yes, no, no,...
+## $ Securities.Account &lt;fct&gt; 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, ...
+## $ CD.Account         &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ Online             &lt;fct&gt; 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, ...
+## $ CreditCard         &lt;fct&gt; 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, ...
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="data-partition2"><strong>2-2. 데이터 분할</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Partition (Traning Data : Test Data = 7:3)</span><span class="w">
+
+</span><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"caret"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">y</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="w">                            </span><span class="c1"># Target</span><span class="w">
+ 
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">200</span><span class="p">)</span><span class="w">
+</span><span class="n">ind</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">createDataPartition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">       </span><span class="c1"># Training Data를 70%로 추출</span><span class="w">
+</span><span class="n">UB.trd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="p">[</span><span class="n">ind</span><span class="o">$</span><span class="n">Resample1</span><span class="p">,]</span><span class="w">                          </span><span class="c1"># Traning Data</span><span class="w">
+</span><span class="n">UB.ted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB</span><span class="p">[</span><span class="o">-</span><span class="n">ind</span><span class="o">$</span><span class="n">Resample1</span><span class="p">,]</span><span class="w">                         </span><span class="c1"># Test Data</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="fit-model2"><strong>2-3. 모형 적합</strong></h2>
+
+<p>Turn Parameter인 <code class="highlighter-rouge">CP</code>의 그리드를 조정하기 위해서 그리드를 조정해주지 않았을 때 결과를 참고하였다. 아래는 그리드를 조정해주지 않았을 때 기본적인 결과이다. (caret에서 자동적으로 xval = 0이며, 최적의 cp를 이용하여 최종 모형을 적합하기 때문에 가지치기를 할 필요가 없다.)</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fitControl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">trainControl</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">"cv"</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="o">=</span><span class="m">5</span><span class="p">)</span><span class="w">    </span><span class="c1"># 5-Fold Cross Validation</span><span class="w">
+
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w">                                        </span><span class="c1"># Seed 고정 For Cross Validation</span><span class="w">
+</span><span class="n">rtree.caret</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">train</span><span class="p">(</span><span class="n">Personal.Loan</span><span class="o">~</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">UB.trd</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s2">"rpart"</span><span class="p">,</span><span class="w"> </span><span class="n">trControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fitControl</span><span class="p">)</span><span class="w">   
+</span><span class="n">rtree.caret</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## CART 
+## 
+## 1751 samples
+##   12 predictor
+##    2 classes: 'no', 'yes' 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold) 
+## Summary of sample sizes: 1401, 1401, 1400, 1401, 1401 
+## Resampling results across tuning parameters:
+## 
+##   cp         Accuracy   Kappa    
+##   0.0500000  0.9697387  0.8284624
+##   0.1000000  0.9611673  0.7713973
+##   0.1666667  0.9485975  0.6144540
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was cp = 0.05.
+</code></pre></div></div>
+
+<p>모수가 하나이기 때문에 3개의 <code class="highlighter-rouge">CP</code> 값을 랜덤적으로 보여주며, 0.05일 때 정확도가 가장 높은 것을 알 수 있다. 아래는 <code class="highlighter-rouge">CP</code>가 0.05일 때 가장 좋으므로, <code class="highlighter-rouge">CP</code>의 탐색 범위를 조절한 코드이다.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">customGrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">expand.grid</span><span class="p">(</span><span class="n">cp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">0.01</span><span class="p">,</span><span class="m">0.07</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="m">0.001</span><span class="p">))</span><span class="w">   </span><span class="c1"># CP의 탐색 범위 </span><span class="w">
+
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w">                                              </span><span class="c1"># Seed 고정 For Cross Validation</span><span class="w">
+</span><span class="n">rtree.grid.caret</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">train</span><span class="p">(</span><span class="n">Personal.Loan</span><span class="o">~</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">UB.trd</span><span class="p">,</span><span class="w"> </span><span class="n">tuneGrid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">customGrid</span><span class="p">,</span><span class="w">
+                          </span><span class="n">method</span><span class="o">=</span><span class="s2">"rpart"</span><span class="p">,</span><span class="w"> </span><span class="n">trControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fitControl</span><span class="p">)</span><span class="w">
+</span><span class="n">rtree.grid.caret</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## CART 
+## 
+## 1751 samples
+##   12 predictor
+##    2 classes: 'no', 'yes' 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold) 
+## Summary of sample sizes: 1401, 1401, 1400, 1401, 1401 
+## Resampling results across tuning parameters:
+## 
+##   cp     Accuracy   Kappa    
+##   0.010  0.9760179  0.8639124
+##   0.011  0.9760179  0.8639124
+##   0.012  0.9760179  0.8639124
+##   0.013  0.9760179  0.8639124
+##   0.014  0.9760179  0.8623885
+##   0.015  0.9760179  0.8623885
+##   0.016  0.9760179  0.8623885
+##   0.017  0.9760179  0.8623885
+##   0.018  0.9765893  0.8653539
+##   0.019  0.9765893  0.8653539
+##   0.020  0.9765893  0.8653539
+##   0.021  0.9760179  0.8629073
+##   0.022  0.9760179  0.8629073
+##   0.023  0.9760179  0.8629073
+##   0.024  0.9760179  0.8629073
+##   0.025  0.9760179  0.8629073
+##   0.026  0.9760179  0.8629073
+##   0.027  0.9760179  0.8629073
+##   0.028  0.9754481  0.8614672
+##   0.029  0.9754481  0.8614672
+##   0.030  0.9754481  0.8614672
+##   0.031  0.9754481  0.8614672
+##   0.032  0.9754481  0.8614672
+##   0.033  0.9754481  0.8614672
+##   0.034  0.9754481  0.8614672
+##   0.035  0.9737387  0.8493612
+##   0.036  0.9737387  0.8493612
+##   0.037  0.9737387  0.8493612
+##   0.038  0.9737387  0.8493612
+##   0.039  0.9737387  0.8493612
+##   0.040  0.9737387  0.8493612
+##   0.041  0.9737387  0.8493612
+##   0.042  0.9725958  0.8410719
+##   0.043  0.9725958  0.8410719
+##   0.044  0.9725958  0.8410719
+##   0.045  0.9725958  0.8410719
+##   0.046  0.9725958  0.8410719
+##   0.047  0.9725958  0.8410719
+##   0.048  0.9725958  0.8410719
+##   0.049  0.9697387  0.8284624
+##   0.050  0.9697387  0.8284624
+##   0.051  0.9697387  0.8284624
+##   0.052  0.9697387  0.8284624
+##   0.053  0.9697387  0.8284624
+##   0.054  0.9697387  0.8284624
+##   0.055  0.9697387  0.8284624
+##   0.056  0.9691673  0.8246504
+##   0.057  0.9691673  0.8246504
+##   0.058  0.9691673  0.8246504
+##   0.059  0.9691673  0.8246504
+##   0.060  0.9691673  0.8246504
+##   0.061  0.9691673  0.8246504
+##   0.062  0.9691673  0.8246504
+##   0.063  0.9691673  0.8246504
+##   0.064  0.9691673  0.8246504
+##   0.065  0.9691673  0.8246504
+##   0.066  0.9691673  0.8246504
+##   0.067  0.9691673  0.8246504
+##   0.068  0.9691673  0.8246504
+##   0.069  0.9691673  0.8246504
+##   0.070  0.9691673  0.8246504
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was cp = 0.02.
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="p">)</span><span class="w">  
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-21-1.jpg" alt="" /></p>
+
+<p><code class="highlighter-rouge">CP</code> 값이 0.02일 때 정확도가 가장 높다는 것을 알 수 있으며, 최종 모형은 <code class="highlighter-rouge">CP</code> = 0.02일 때 적합된 모형이다.</p>
+
+<hr />
+
+<h2 id="tree-plot2"><strong>2-4. Tree 그림</strong></h2>
+
+<h3 id="2-4-1-fancyrpartplot"><strong>2-4-1. “fancyRpartPlot”</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"rattle"</span><span class="p">)</span><span class="w">
+</span><span class="n">fancyRpartPlot</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="o">$</span><span class="n">finalModel</span><span class="p">)</span><span class="w">    </span><span class="c1"># 가독성 좋은 그래프</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-22-1.jpg" alt="" /></p>
+
+<h3 id="2-4-2-vistree"><strong>2-4-2. “visTree”</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"visNetwork"</span><span class="p">,</span><span class="s2">"sparkline"</span><span class="p">)</span><span class="w">  
+
+</span><span class="n">visTree</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="o">$</span><span class="n">finalModel</span><span class="p">)</span><span class="w">       </span><span class="c1"># 네트워크 기반 그래프</span><span class="w">
+</span></code></pre></div></div>
+
+<h2><img src="assets/built/images/2020-09-30-Decision_files/network-2.png" alt="" /></h2>
+
+<h2 id="e-m2"><strong>2-5. 모형 평가</strong></h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 적합된 모형으로 Test Data의 클래스 예측</span><span class="w">
+</span><span class="n">rtree.grid.caret.pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">UB.ted</span><span class="p">)</span><span class="w">   </span><span class="c1"># predict(트리모형, Test Data) </span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="2-5-1-confusionmatrix"><strong>2-5-1. ConfusionMatrix</strong></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">confusionMatrix</span><span class="p">(</span><span class="n">rtree.grid.caret.pred</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">,</span><span class="w"> </span><span class="n">positive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">)</span><span class="w">   </span><span class="c1"># ConfusionMatrix(예측 클래스, 실제 클래스, positive="관심 클래스")</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  no yes
+##        no  665  15
+##        yes   8  61
+##                                           
+##                Accuracy : 0.9693          
+##                  95% CI : (0.9543, 0.9804)
+##     No Information Rate : 0.8985          
+##     P-Value [Acc &gt; NIR] : 1.268e-13       
+##                                           
+##                   Kappa : 0.8244          
+##                                           
+##  Mcnemar's Test P-Value : 0.2109          
+##                                           
+##             Sensitivity : 0.80263         
+##             Specificity : 0.98811         
+##          Pos Pred Value : 0.88406         
+##          Neg Pred Value : 0.97794         
+##              Prevalence : 0.10147         
+##          Detection Rate : 0.08144         
+##    Detection Prevalence : 0.09212         
+##       Balanced Accuracy : 0.89537         
+##                                           
+##        'Positive' Class : yes             
+## 
+</code></pre></div></div>
+
+<h3 id="2-5-2-roc-곡선"><strong>2-5-2. ROC 곡선</strong></h3>
+
+<p><br /></p>
+
+<h4 id="1-package-proc-1"><strong>1) Package “pROC”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"pROC"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UB.ted</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s2">"prob"</span><span class="p">)</span><span class="w">  </span><span class="c1">#  Training Data로 적합시킨 모형에 대한 Test Data의 각 클래스에 대한 예측 확률</span><span class="w">
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">test.rtree.prob</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">                                       </span><span class="c1"># "yes"에 대한 예측 확률</span><span class="w">
+
+
+</span><span class="n">ac</span><span class="w">             </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="w">                                       
+</span><span class="n">pp</span><span class="w">             </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">)</span><span class="w">                                </span><span class="c1"># "yes"에 대한 예측 확률</span><span class="w">
+
+</span><span class="n">tree.roc</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">roc</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">,</span><span class="w"> </span><span class="n">plot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">)</span><span class="w">                         </span><span class="c1"># roc(실제 클래스, 예측 확률)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Setting levels: control = no, case = yes
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Setting direction: controls &lt; cases
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">auc</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">auc</span><span class="p">(</span><span class="n">tree.roc</span><span class="p">),</span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomright"</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="n">auc</span><span class="p">,</span><span class="w"> </span><span class="n">bty</span><span class="o">=</span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-26-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">pROC</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="2-package-epi-1"><strong>2) Package “Epi”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"devtools"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Epi"</span><span class="p">)</span><span class="w">
+</span><span class="c1"># install_version("etm", version = "1.1", repos = "http://cran.us.r-project.org")</span><span class="w">
+
+</span><span class="n">ROC</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="w"> </span><span class="n">ac</span><span class="p">,</span><span class="w"> </span><span class="n">plot</span><span class="o">=</span><span class="s2">"ROC"</span><span class="p">)</span><span class="w">		</span><span class="c1"># ROC(예측 확률, 실제 클래스) / 최적의 cutoff value 예측 가능</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-27-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">Epi</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="3-package-rocr-1"><strong>3) Package “ROCR”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"ROCR"</span><span class="p">)</span><span class="w">                                                  
+
+</span><span class="n">rtree.pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prediction</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">)</span><span class="w"> </span><span class="c1"># prediction(예측 확률, 실제 클레스)   </span><span class="w">
+
+
+</span><span class="n">rtree.perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"tpr"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fpr"</span><span class="p">)</span><span class="w">             </span><span class="c1"># performance(, "민감도", "1-특이도")                      </span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">rtree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s2">"red"</span><span class="p">)</span><span class="w">                                     </span><span class="c1"># ROC Curve</span><span class="w">
+
+</span><span class="n">perf.auc</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"auc"</span><span class="p">)</span><span class="w">               </span><span class="c1"># AUC</span><span class="w">
+</span><span class="n">auc</span><span class="w">             </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">attributes</span><span class="p">(</span><span class="n">perf.auc</span><span class="p">)</span><span class="o">$</span><span class="n">y.values</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="n">auc</span><span class="p">,</span><span class="w"> </span><span class="n">bty</span><span class="o">=</span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-28-1.jpg" alt="" /></p>
+
+<h3 id="2-5-3-향상-차트"><strong>2-5-3. 향상 차트</strong></h3>
+
+<p><br /></p>
+
+<h4 id="1-package-rocr-1"><strong>1) Package “ROCR”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rtree.perf</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"lift"</span><span class="p">,</span><span class="w"> </span><span class="s2">"rpp"</span><span class="p">)</span><span class="w"> 	    </span><span class="c1"># Lift Chart</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">rtree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s2">"lift curve"</span><span class="p">,</span><span class="w"> </span><span class="n">colorize</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">	
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-29-1.jpg" alt="" /></p>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">ROCR</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="2-package-lift-1"><strong>2) Package “lift”</strong></h4>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"lift"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">ac.numeric</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="o">==</span><span class="s2">"yes"</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w">                  </span><span class="c1"># 실제 클래스를 수치형으로 변환</span><span class="w">
+
+</span><span class="n">plotLift</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">ac.numeric</span><span class="p">,</span><span class="w"> </span><span class="n">cumulative</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w"> </span><span class="n">n.buckets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">24</span><span class="p">)</span><span class="w">  </span><span class="c1"># plotLift(예측 확률, 실제 클래스)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-30-1.jpg" alt="" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TopDecileLift</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">ac.numeric</span><span class="p">)</span><span class="w">		                         </span><span class="c1"># Top 10% 향상도 출력</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 8.147
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detach</span><span class="p">(</span><span class="n">package</span><span class="o">:</span><span class="n">lift</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h1 id="c-m"><strong>3. 모형 비교</strong></h1>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pacman</span><span class="o">::</span><span class="n">p_load</span><span class="p">(</span><span class="s2">"ROCR"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Package "rpart"</span><span class="w">
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">UB.trd.prune.rtree</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">UB.ted</span><span class="p">)</span><span class="w">                     </span><span class="c1"># Training Data로 적합시킨 모형에 대한 Test Data의 각 클래스에 대한 예측 확률</span><span class="w">
+</span><span class="n">test.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">test.rtree.prob</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">                                             </span><span class="c1"># "1"에 대한 예측 확률</span><span class="w">
+
+</span><span class="n">rtree.pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prediction</span><span class="p">(</span><span class="n">test.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">)</span><span class="w">                    </span><span class="c1"># prediction(예측 확률, 실제 클레스)  </span><span class="w">
+
+</span><span class="n">rtree.perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"tpr"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fpr"</span><span class="p">)</span><span class="w">                                </span><span class="c1"># performance(, "민감도", "1-특이도")                      </span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">rtree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">)</span><span class="w">                                                       </span><span class="c1"># ROC Curve</span><span class="w">
+</span><span class="n">par</span><span class="p">(</span><span class="n">new</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Pacakge "caret"</span><span class="w">
+</span><span class="n">test.caret.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">rtree.grid.caret</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UB.ted</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s2">"prob"</span><span class="p">)</span><span class="w">  </span><span class="c1"># Training Data로 적합시킨 모형에 대한 Test Data의 각 클래스에 대한 예측 확률</span><span class="w">
+</span><span class="n">test.caret.rtree.prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">test.caret.rtree.prob</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">                                 </span><span class="c1"># "yes"에 대한 예측 확률</span><span class="w">
+
+</span><span class="n">caret.rtree.pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prediction</span><span class="p">(</span><span class="n">test.caret.rtree.prob</span><span class="p">,</span><span class="w"> </span><span class="n">UB.ted</span><span class="o">$</span><span class="n">Personal.Loan</span><span class="p">)</span><span class="w">        </span><span class="c1"># prediction(예측 확률, 실제 클레스) </span><span class="w">
+
+</span><span class="n">ctree.perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">performance</span><span class="p">(</span><span class="n">caret.rtree.pred</span><span class="p">,</span><span class="w"> </span><span class="s2">"tpr"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fpr"</span><span class="p">)</span><span class="w">                          </span><span class="c1"># performance(, "민감도", "1-특이도")                      </span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">ctree.perf</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s2">"red"</span><span class="p">)</span><span class="w">                                                        </span><span class="c1"># ROC Curve</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"rpart"</span><span class="p">,</span><span class="s2">"caret"</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"blue"</span><span class="p">,</span><span class="w"> </span><span class="s2">"red"</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="assets/built/images/2020-09-30-Decision_files/unnamed-chunk-31-1.jpg" alt="" /></p>
+
+
+                        </div>
+                    </section>
+
+                    <!-- Email subscribe form at the bottom of the page -->
+        <!--
+            
+                <section class="subscribe-form">
+                    <h3 class="subscribe-form-title">Subscribe to Machine Learning with R</h3>
+                    <p>Get the latest posts delivered right to your inbox</p>
+                    <form method="post" action="/subscribe/" class="">
+    <input class="confirm" type="hidden" name="confirm"  /><input class="location" type="hidden" name="location"  /><input class="referrer" type="hidden" name="referrer"  />
+
+    <div class="form-group">
+        <input class="subscribe-email" type="email" name="email"  placeholder="youremail@example.com" />
+    </div>
+    <button class="" type="submit" disabled><span>Subscribe</span></button>
+    <script type="text/javascript">(function(g,h,o,s,t){h[o]('.location')[s]=h[o]('.location')[s] || g.location.href;h[o]('.referrer')[s]=h[o]('.referrer')[s] || h.referrer;})(window,document,'querySelector','value');</script>
+</form>
+
+                </section>
+            
+-->
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                        <section class="author-card">
+                            
+                                <img class="author-profile-image" src="/assets/built/images/author-logo.jpg" alt="YeongEun" />
+                            
+                            <section class="author-card-content">
+                                <h4 class="author-card-name"><a href="/author/YeongEun">YeongEun Jeon</a></h4>
+                                
+                                    <p><a>Yeongnam University</a></p>
+                                
+                            </section>
+                        </section>
+                        <div class="post-full-footer-right">
+                            <a class="author-card-button" href="/author/YeongEun">Read More</a>
+                        </div>
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+                <section class="post-full-comments">
+                    <div id="disqus_thread"></div>
+                    <script>
+                        var disqus_config = function () {
+                            this.page.url = 'https://JJJJYE.github.io/Decision';
+                            this.page.identifier = '/Decision';
+                            this.page.title = 'Decision Tree';
+                        };
+                        (function() {
+                            var d = document, s = d.createElement('script');
+                            s.src = 'https://xxxxxxxx.disqus.com/embed.js';
+                            s.setAttribute('data-timestamp', +new Date());
+                            (d.head || d.body).appendChild(s);
+                        })();
+                    </script>
+                </section>
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/Model-Evaluation">
+                <div class="post-card-image" style="background-image: url(/assets/built/images/machine-logo.jpeg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/Model-Evaluation">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Machine-learning</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">Model Evaluation</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                        
+                        <img class="author-profile-image" src="/assets/built/images/author-logo.jpg" alt="YeongEun Jeon" />
+                        
+                        <span class="post-card-author">
+                            <a href="/author/YeongEun/">YeongEun Jeon</a>
+                        </span>
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://JJJJYE.github.io/">
+            
+            <span>Machine Learning with R</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Decision Tree</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Decision+Tree&amp;url=https://JJJJYE.github.io/Decision"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://JJJJYE.github.io/Decision"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://JJJJYE.github.io/">Machine Learning with R</a> &copy; 2020</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+        <div id="subscribe" class="subscribe-overlay">
+            <a class="subscribe-overlay-close" href="#"></a>
+            <div class="subscribe-overlay-content">
+                
+                <h1 class="subscribe-overlay-title">Subscribe to Machine Learning with R</h1>
+                <p class="subscribe-overlay-description">Stay up to date! Get all the latest &amp; greatest posts delivered straight to your inbox</p>
+                <form method="post" action="/subscribe/" class="">
+    <input class="confirm" type="hidden" name="confirm"  /><input class="location" type="hidden" name="location"  /><input class="referrer" type="hidden" name="referrer"  />
+
+    <div class="form-group">
+        <input class="subscribe-email" type="email" name="email"  placeholder="youremail@example.com" />
+    </div>
+    <button class="" type="submit" disabled><span>Subscribe</span></button>
+    <script type="text/javascript">(function(g,h,o,s,t){h[o]('.location')[s]=h[o]('.location')[s] || g.location.href;h[o]('.referrer')[s]=h[o]('.referrer')[s] || h.referrer;})(window,document,'querySelector','value');</script>
+</form>
+
+            </div>
+        </div>
+    
+
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.10.0/components/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="https://demo.ghost.io/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-xxxxxxxx-x', 'auto');
+  ga('send', 'pageview');
+
+ </script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>
